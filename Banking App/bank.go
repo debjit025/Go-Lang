@@ -6,7 +6,7 @@ import (
 	"examples.com/bank/fileops"
 )
 
-const accountBalanceText = "Balance.txt"
+const accountBalanceText = "Balance.txt" //Accepting text file name
 
 func main() {
 	var choice int32
