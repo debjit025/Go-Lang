@@ -2,55 +2,41 @@ package main
 
 import (
 	"fmt"
-	"time"
+
+	"example.com/structs/user"
 )
-
-type user struct {
-	firstName string
-	lastName  string
-	birthdate string
-	createdAt time.Time
-}
-
-// func (u user) outputUserDetails() { //Attaching a function to a struct
-// 	fmt.Println(u.firstName, u.lastName, u.createdAt)
-// }
-
-func (u *user) clearUserName() { //We have to use the pointer here to change the original values, otherwise we are just changing the copies.
-	u.firstName = ""
-	u.lastName = ""
-}
-
-func newUser(userFirstName, userLastName, userBirthdate string) user { //can also use *user
-	return user{ //Can also use &user to save memory
-		firstName: userFirstName, //Can remove the first words if the sequence is the same
-		lastName:  userLastName,  //Can remove the first words if the sequence is the same
-		birthdate: userBirthdate, //Can remove the first words if the sequence is the same
-		createdAt: time.Now(),    //Can remove the first words if the sequence is the same
-	}
-}
 
 func main() {
 	userFirstName := getUserData("Please enter your first name: ")
 	userLastName := getUserData("Please enter your last name: ")
-	userBirthdate := getUserData("Please enter your birthdate (MM/DD/YYYY): ")
+	userBirthdate := getUserData("Please enter your birthdate (DD/MM/YYYY): ")
 
 	// var appUser user
-	appUser := newUser(userFirstName, userLastName, userBirthdate)
+	appUser, err := user.NewUser(userFirstName, userLastName, userBirthdate)
+	if err != nil {
+		panic(err)
+	}
+
+	app := user.User{
+		FirstName: "Max",
+		LastName:  "Shwartz",
+	}
+
+	fmt.Println(app)
 
 	// ... do something awesome with that gathered data!
-	outputUserDetails(appUser)
-	appUser.clearUserName()
-	outputUserDetails(appUser)
+	// outputUserDetails(*appUser)
+	// appUser.ClearUserName()
+	outputUserDetails(*appUser)
 }
 
-func outputUserDetails(u user) {
-	fmt.Println(u.firstName, u.lastName, u.createdAt)
+func outputUserDetails(u user.User) {
+	fmt.Println(u)
 }
 
 func getUserData(promptText string) string {
 	fmt.Print(promptText)
 	var value string
-	fmt.Scan(&value)
+	fmt.Scanln(&value)
 	return value
 }
